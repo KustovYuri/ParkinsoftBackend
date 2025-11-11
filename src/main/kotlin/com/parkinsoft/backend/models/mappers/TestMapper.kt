@@ -1,5 +1,8 @@
 package com.parkinsoft.backend.models.mappers
 
+import com.parkinsoft.backend.database_utils.tests.control.HADS
+import com.parkinsoft.backend.database_utils.tests.control.LANSS
+import com.parkinsoft.backend.database_utils.tests.control.OSVESTRY
 import com.parkinsoft.backend.database_utils.tests.dayli.STATE_OF_HEALTH_DIARY
 import com.parkinsoft.backend.database_utils.tests.dayli.TEST_STIMULATION_DIARY
 import com.parkinsoft.backend.models.entity.TestAnswer
@@ -123,7 +126,7 @@ fun TestPreview.convertToTestPreviewModel(summaryPoints: Int): TestPreviewModel 
 }
 
 fun PatientBody.convertToPreviewList(patientId: Long): List<TestPreview> {
-    return this.dailyTests?.map {
+    val dailyTestPreview = this.dailyTests?.map {
         val testType = TestType.fromValue(it)
 
         when(testType){
@@ -148,4 +151,37 @@ fun PatientBody.convertToPreviewList(patientId: Long): List<TestPreview> {
             }
         }
     } ?: emptyList()
+
+    val controlTestPreview = this.controlTests?.map {
+        val testType = TestType.fromValue(it)
+
+        when(testType){
+            TestType.OSVESTRY -> {
+                OSVESTRY.convertToTestPreviewEntity(
+                    patientId = patientId,
+                    testDate = LocalDate.now(),
+                )
+            }
+            TestType.LANSS -> {
+                LANSS.convertToTestPreviewEntity(
+                    patientId = patientId,
+                    testDate = LocalDate.now(),
+                )
+            }
+            TestType.HADS -> {
+                HADS.convertToTestPreviewEntity(
+                    patientId = patientId,
+                    testDate = LocalDate.now(),
+                )
+            }
+            else -> {
+                OSVESTRY.convertToTestPreviewEntity(
+                    patientId = patientId,
+                    testDate = LocalDate.now(),
+                )
+            }
+        }
+    } ?: emptyList()
+
+    return dailyTestPreview + controlTestPreview
 }

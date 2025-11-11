@@ -22,7 +22,10 @@ data class TestAnswerModel(
 
 enum class TestType(val value: String) {
     TEST_STIMULATION_DIARY("test_stimulation_diary"),
-    STATE_OF_HEALTH_DIARY("state_of_health_diary");
+    STATE_OF_HEALTH_DIARY("state_of_health_diary"),
+    HADS("hads"),
+    OSVESTRY("osvestry"),
+    LANSS("lanss"), ;
 
     companion object {
         fun fromValue(value: String): TestType? =
