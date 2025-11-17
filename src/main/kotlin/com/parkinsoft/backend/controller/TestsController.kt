@@ -1,6 +1,7 @@
 package com.parkinsoft.backend.controller
 
 import com.parkinsoft.backend.models.entity.TestPreview
+import com.parkinsoft.backend.models.model.PainDetectedRequest
 import com.parkinsoft.backend.models.model.TestAnswersDTO
 import com.parkinsoft.backend.models.model.TestModel
 import com.parkinsoft.backend.models.model.TestResultModel
@@ -26,6 +27,11 @@ class TestsController(
         testService.saveTestAnswers(testAnswers)
     }
 
+    @PostMapping("savePainDetectedTestAnswers")
+    fun savePainDetectedTestAnswers(@RequestBody testAnswers: PainDetectedRequest) {
+        testService.savePainDetectedTestAnswers(testAnswers)
+    }
+
     @GetMapping("allTests/{testPreviewId}/{testType}")
     fun getAllTestsByTestPreviewId(
         @PathVariable testPreviewId: Long,
@@ -33,7 +39,7 @@ class TestsController(
     ): List<TestModel>{
         val testType = TestType.fromValue(testType)
         return if (testType != null){
-            testService.getTestAllTestByTestPreviewId(testPreviewId, testType)
+            testService.getSingleAnswerTestAllTestByTestPreviewId(testPreviewId, testType)
         } else {
             listOf()
         }

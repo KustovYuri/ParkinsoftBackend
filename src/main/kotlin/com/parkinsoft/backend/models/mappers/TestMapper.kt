@@ -5,9 +5,14 @@ import com.parkinsoft.backend.database_utils.tests.control.LANSS
 import com.parkinsoft.backend.database_utils.tests.control.OSVESTRY
 import com.parkinsoft.backend.database_utils.tests.dayli.STATE_OF_HEALTH_DIARY
 import com.parkinsoft.backend.database_utils.tests.dayli.TEST_STIMULATION_DIARY
-import com.parkinsoft.backend.models.entity.TestAnswer
+import com.parkinsoft.backend.models.entity.TestNativeGraphicAnswer
+import com.parkinsoft.backend.models.entity.TestNativeHumanPointAnswer
+import com.parkinsoft.backend.models.entity.TestNativeSingleAnswer
+import com.parkinsoft.backend.models.entity.TestNativeSliderAnswer
+import com.parkinsoft.backend.models.entity.TestSingleAnswer
 import com.parkinsoft.backend.models.entity.TestPreview
 import com.parkinsoft.backend.models.model.AllTestAnswerModel
+import com.parkinsoft.backend.models.model.PainDetectedTestQuestions
 import com.parkinsoft.backend.models.model.PatientBody
 import com.parkinsoft.backend.models.model.TestAnswerModel
 import com.parkinsoft.backend.models.model.TestAnswersDTO
@@ -15,10 +20,11 @@ import com.parkinsoft.backend.models.model.ShortTestPreviewModel
 import com.parkinsoft.backend.models.model.TestModel
 import com.parkinsoft.backend.models.model.TestPreviewModel
 import com.parkinsoft.backend.models.model.TestType
+import com.parkinsoft.backend.utils.convertToString
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-private fun TestAnswer.convertToAllTEstAnswersModel(): AllTestAnswerModel {
+private fun TestSingleAnswer.convertToAllTEstAnswersModel(): AllTestAnswerModel {
     return AllTestAnswerModel(
         id = id,
         testAnswer = testAnswer,
@@ -46,23 +52,23 @@ fun ShortTestPreviewModel.convertToTestPreviewEntity(
     )
 }
 
-fun ShortTestPreviewModel.convertToTestResponse(previewId: Long, allUserTestAnswers: List<TestAnswer>): List<TestModel> {
+fun ShortTestPreviewModel.convertToTestResponse(previewId: Long, allUserTestSingleAnswers: List<TestSingleAnswer>): List<TestModel> {
     return this.testQuestions.map { testQuestions ->
         TestModel(
             previewId = previewId,
             questionId = testQuestions.questionId,
             questionName = testQuestions.testQuestion,
-            answers = testQuestions.testAnswers.convertToTestAnswersResponse(previewId, allUserTestAnswers, testQuestions.questionId)
+            answers = testQuestions.testAnswers.convertToTestAnswersResponse(previewId, allUserTestSingleAnswers, testQuestions.questionId)
         )
     }
 }
 
 fun List<TestAnswerModel>.convertToTestAnswersResponse(
     previewId: Long,
-    allUserTestAnswers: List<TestAnswer>,
+    allUserTestSingleAnswers: List<TestSingleAnswer>,
     questionId: Long
 ): List<TestAnswersDTO> {
-    return if (allUserTestAnswers.isEmpty()) {
+    return if (allUserTestSingleAnswers.isEmpty()) {
         this.map { testAnswerModel ->
             TestAnswersDTO(
                 questionId = questionId,
@@ -74,7 +80,7 @@ fun List<TestAnswerModel>.convertToTestAnswersResponse(
         }
     } else {
         this.map { testAnswerModel ->
-            val selectedAnswer = allUserTestAnswers.find { it.testAnswer == testAnswerModel.testAnswer }
+            val selectedAnswer = allUserTestSingleAnswers.find { it.testAnswer == testAnswerModel.testAnswer }
             if (selectedAnswer == null) {
                 TestAnswersDTO(
                     questionId = testAnswerModel.questionId,
@@ -97,9 +103,9 @@ fun List<TestAnswerModel>.convertToTestAnswersResponse(
     }
 }
 
-fun List<TestAnswersDTO>.mapToEntity(): List<TestAnswer> {
+fun List<TestAnswersDTO>.mapToGraphicEntity(): List<TestSingleAnswer> {
     return this.map {
-        TestAnswer(
+        TestSingleAnswer(
             id = null,
             questionId = it.questionId,
             testAnswer = it.testAnswer,
@@ -135,7 +141,6 @@ fun PatientBody.convertToPreviewList(patientId: Long): List<TestPreview> {
                     patientId = patientId,
                     testDate = LocalDate.now(),
                 )
-
             }
             TestType.STATE_OF_HEALTH_DIARY -> {
                 STATE_OF_HEALTH_DIARY.convertToTestPreviewEntity(
@@ -153,9 +158,7 @@ fun PatientBody.convertToPreviewList(patientId: Long): List<TestPreview> {
     } ?: emptyList()
 
     val controlTestPreview = this.controlTests?.map {
-        val testType = TestType.fromValue(it)
-
-        when(testType){
+        when(val testType = TestType.fromValue(it)){
             TestType.OSVESTRY -> {
                 OSVESTRY.convertToTestPreviewEntity(
                     patientId = patientId,
@@ -174,6 +177,15 @@ fun PatientBody.convertToPreviewList(patientId: Long): List<TestPreview> {
                     testDate = LocalDate.now(),
                 )
             }
+            TestType.DN4 -> {
+                getNativeTestPreview(patientId, testType)
+            }
+            TestType.PAIN_DETECTED -> {
+                getNativeTestPreview(patientId, testType)
+            }
+            TestType.SF36 -> {
+                getNativeTestPreview(patientId, testType)
+            }
             else -> {
                 OSVESTRY.convertToTestPreviewEntity(
                     patientId = patientId,
@@ -184,4 +196,61 @@ fun PatientBody.convertToPreviewList(patientId: Long): List<TestPreview> {
     } ?: emptyList()
 
     return dailyTestPreview + controlTestPreview
+}
+
+private fun getNativeTestPreview(
+    patientId: Long,
+    testType: TestType
+): TestPreview = TestPreview(
+    patientId = patientId,
+    testType = testType.value,
+    testDate = LocalDate.now().convertToString(),
+    testTime = 15,
+    questionsCount = 15,
+    isCompleted = false,
+    isViewed = false,
+)
+
+fun List<PainDetectedTestQuestions.Graphic>.mapToGraphicEntity(testPreviewId: Long): List<TestNativeGraphicAnswer> {
+    return this.map {
+        TestNativeGraphicAnswer(
+            testPreviewId = testPreviewId,
+            nativeTestId = it.id,
+            question = it.question,
+            selectedVariant = it.selectedVariant
+        )
+    }
+}
+
+fun List<PainDetectedTestQuestions.SingleAnswer>.mapToSingleAnswerEntity(testPreviewId: Long): List<TestNativeSingleAnswer> {
+    return this.map {
+        TestNativeSingleAnswer(
+            testPreviewId = testPreviewId,
+            nativeTestId = it.id,
+            question = it.question,
+            selectedAnswer = it.selectedAnswer
+        )
+    }
+}
+
+fun List<PainDetectedTestQuestions.Slider>.mapToSliderEntity(testPreviewId: Long): List<TestNativeSliderAnswer> {
+    return this.map {
+        TestNativeSliderAnswer(
+            testPreviewId = testPreviewId,
+            nativeTestId = it.id,
+            sliderAnswers = it.sliderAnswers
+        )
+    }
+}
+
+fun List<PainDetectedTestQuestions.HumanPoint>.mapToHumanPointEntity(testPreviewId: Long): List<TestNativeHumanPointAnswer> {
+    return this.map {
+        TestNativeHumanPointAnswer(
+            testPreviewId = testPreviewId,
+            nativeTestId = it.id,
+            question = it.question,
+            type = it.type,
+            selectedPoints = it.selectedPoints
+        )
+    }
 }

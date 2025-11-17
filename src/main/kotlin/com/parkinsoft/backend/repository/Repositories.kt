@@ -3,7 +3,7 @@ package com.parkinsoft.backend.repository
 import com.parkinsoft.backend.models.entity.Doctor
 import com.parkinsoft.backend.models.entity.Patient
 import com.parkinsoft.backend.models.entity.TestPreview
-import com.parkinsoft.backend.models.entity.TestAnswer
+import com.parkinsoft.backend.models.entity.TestSingleAnswer
 import jakarta.transaction.Transactional
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
@@ -57,17 +57,17 @@ interface TestPreviewRepository : JpaRepository<TestPreview, Long> {
     fun updateCompletedDate(@Param("id") id: Long, @Param("date") date: String): Int
 }
 
-interface TestAnswerRepository : JpaRepository<TestAnswer, Long> {
-    fun findByTestPreviewId(testPreviewId: Long): List<TestAnswer>
+interface TestAnswerRepository : JpaRepository<TestSingleAnswer, Long> {
+    fun findByTestPreviewId(testPreviewId: Long): List<TestSingleAnswer>
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM TestAnswer ta WHERE ta.testPreviewId = :previewId")
+    @Query("DELETE FROM TestSingleAnswer ta WHERE ta.testPreviewId = :previewId")
     fun deleteAllByTestPreviewId(@Param("previewId") previewId: Long)
 
     @Query("""
         SELECT COALESCE(SUM(ta.answerPoint), 0)
-        FROM TestAnswer ta
+        FROM TestSingleAnswer ta
         WHERE ta.testPreviewId = :previewId
     """)
     fun countSummaryPointsInTest(previewId: Long): Long
