@@ -1,6 +1,7 @@
 package com.parkinsoft.backend.models.mappers
 
-import com.parkinsoft.backend.database_utils.tests.control.HADS
+import com.parkinsoft.backend.database_utils.tests.control.HADS1
+import com.parkinsoft.backend.database_utils.tests.control.HADS2
 import com.parkinsoft.backend.database_utils.tests.control.LANSS
 import com.parkinsoft.backend.database_utils.tests.control.OSVESTRY
 import com.parkinsoft.backend.database_utils.tests.dayli.STATE_OF_HEALTH_DIARY
@@ -171,8 +172,14 @@ fun PatientBody.convertToPreviewList(patientId: Long): List<TestPreview> {
                     testDate = LocalDate.now(),
                 )
             }
-            TestType.HADS -> {
-                HADS.convertToTestPreviewEntity(
+            TestType.HADS1 -> {
+                HADS1.convertToTestPreviewEntity(
+                    patientId = patientId,
+                    testDate = LocalDate.now(),
+                )
+            }
+            TestType.HADS2 -> {
+                HADS2.convertToTestPreviewEntity(
                     patientId = patientId,
                     testDate = LocalDate.now(),
                 )

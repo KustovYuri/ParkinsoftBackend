@@ -1,6 +1,7 @@
 package com.parkinsoft.backend.service
 
-import com.parkinsoft.backend.database_utils.tests.control.HADS
+import com.parkinsoft.backend.database_utils.tests.control.HADS1
+import com.parkinsoft.backend.database_utils.tests.control.HADS2
 import com.parkinsoft.backend.database_utils.tests.control.LANSS
 import com.parkinsoft.backend.database_utils.tests.control.OSVESTRY
 import com.parkinsoft.backend.database_utils.tests.dayli.STATE_OF_HEALTH_DIARY
@@ -53,11 +54,14 @@ class TestService(
             TestType.LANSS -> {
                 LANSS.convertToTestResponse(testPreviewId, allUserTestAnswers)
             }
-            TestType.HADS -> {
-                HADS.convertToTestResponse(testPreviewId, allUserTestAnswers)
+            TestType.HADS1 -> {
+                HADS1.convertToTestResponse(testPreviewId, allUserTestAnswers)
+            }
+            TestType.HADS2 -> {
+                HADS2.convertToTestResponse(testPreviewId, allUserTestAnswers)
             }
             else -> {
-                HADS.convertToTestResponse(testPreviewId, allUserTestAnswers)
+                HADS1.convertToTestResponse(testPreviewId, allUserTestAnswers)
             }
         }
     }
@@ -92,15 +96,21 @@ class TestService(
                         testAnswer
                     )
                 }
-                TestType.HADS -> {
+                TestType.HADS1 -> {
                     getTestResultModel(
-                        HADS,
+                        HADS1,
+                        testAnswer
+                    )
+                }
+                TestType.HADS2 -> {
+                    getTestResultModel(
+                        HADS2,
                         testAnswer
                     )
                 }
                 else -> {
                     getTestResultModel(
-                        HADS,
+                        HADS1,
                         testAnswer
                     )
                 }
