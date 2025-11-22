@@ -121,6 +121,29 @@ class TestService(
         }
     }
 
+    fun getAllSuccessfulNativeTestAnswers(testPreviewId: Long): NativeTestRequest {
+        testPreviewRepository.markViewedTestPreviewById(testPreviewId)
+
+        val testNativeGraphicAnswers = testNativeGraphicAnswerRepository.findByTestPreviewId(testPreviewId).map { it.convertToRequest() }
+        val testNativeSingleAnswers = testNativeSingleAnswerRepository.findByTestPreviewId(testPreviewId).map { it.convertToRequest() }
+        val testNativeSliderAnswers = testNativeSliderAnswerRepository.findByTestPreviewId(testPreviewId).map { it.convertToRequest() }
+        val testNativeHumanPointAnswers = testNativeHumanPointAnswerRepository.findByTestPreviewId(testPreviewId).map { it.convertToRequest() }
+        val testNativeYesNoAnswers = testNativeYesNoAnswerRepository.findByTestPreviewId(testPreviewId).map { it.convertToRequest() }
+        val testNativeDisplaySliderAnswers = testNativeDisplaySliderAnswerRepository.findByTestPreviewId(testPreviewId).map { it.convertToRequest() }
+        val testNativeCommentAnswers = testNativeCommentAnswerRepository.findByTestPreviewId(testPreviewId).map { it.convertToRequest() }
+
+        return NativeTestRequest(
+            testPreviewId = testPreviewId,
+            singleAnswers = testNativeSingleAnswers,
+            humanPoints = testNativeHumanPointAnswers,
+            sliderAnswers = testNativeSliderAnswers,
+            graphicAnswers = testNativeGraphicAnswers,
+            yesNoAnswers = testNativeYesNoAnswers,
+            displaySliderAnswers = testNativeDisplaySliderAnswers,
+            commentAnswers = testNativeCommentAnswers,
+        )
+    }
+
     private fun getTestResultModel(
         shortTestPreviewModel: ShortTestPreviewModel,
         testSingleAnswer: TestSingleAnswer

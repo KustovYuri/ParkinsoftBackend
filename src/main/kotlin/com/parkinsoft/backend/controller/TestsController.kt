@@ -62,6 +62,13 @@ class TestsController(
         }
     }
 
+    @GetMapping("/getResultNativeTests/{testPreviewId}")
+    fun getAllSuccessfulNativeTestAnswers(
+        @PathVariable testPreviewId: Long,
+    ): NativeTestRequest {
+        return testService.getAllSuccessfulNativeTestAnswers(testPreviewId)
+    }
+
 
     @PostMapping("allTests")
     fun create(@RequestBody user: TestPreview): TestPreview = testPreviewService.create(user)
