@@ -1,6 +1,7 @@
 package com.parkinsoft.backend.controller
 
 import com.parkinsoft.backend.models.entity.TestPreview
+import com.parkinsoft.backend.models.model.NativeTestRequest
 import com.parkinsoft.backend.models.model.PainDetectedRequest
 import com.parkinsoft.backend.models.model.TestAnswersDTO
 import com.parkinsoft.backend.models.model.TestModel
@@ -27,9 +28,9 @@ class TestsController(
         testService.saveTestAnswers(testAnswers)
     }
 
-    @PostMapping("savePainDetectedTestAnswers")
-    fun savePainDetectedTestAnswers(@RequestBody testAnswers: PainDetectedRequest) {
-        testService.savePainDetectedTestAnswers(testAnswers)
+    @PostMapping("saveNativeTest")
+    fun saveNativeTest(@RequestBody testAnswers: NativeTestRequest) {
+        testService.saveNativeTestTestAnswers(testAnswers)
     }
 
     @GetMapping("allTests/{testPreviewId}/{testType}")

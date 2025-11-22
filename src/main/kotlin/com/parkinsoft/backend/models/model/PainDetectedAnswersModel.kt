@@ -37,5 +37,5 @@ sealed interface PainDetectedTestQuestions {
 }
 
 enum class HumanImageType {
-    HEAD, BACK
+    FRONT, BACK
 }

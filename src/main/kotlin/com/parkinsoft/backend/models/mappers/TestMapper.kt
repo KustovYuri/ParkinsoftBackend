@@ -6,10 +6,6 @@ import com.parkinsoft.backend.database_utils.tests.control.LANSS
 import com.parkinsoft.backend.database_utils.tests.control.OSVESTRY
 import com.parkinsoft.backend.database_utils.tests.dayli.STATE_OF_HEALTH_DIARY
 import com.parkinsoft.backend.database_utils.tests.dayli.TEST_STIMULATION_DIARY
-import com.parkinsoft.backend.models.entity.TestNativeGraphicAnswer
-import com.parkinsoft.backend.models.entity.TestNativeHumanPointAnswer
-import com.parkinsoft.backend.models.entity.TestNativeSingleAnswer
-import com.parkinsoft.backend.models.entity.TestNativeSliderAnswer
 import com.parkinsoft.backend.models.entity.TestSingleAnswer
 import com.parkinsoft.backend.models.entity.TestPreview
 import com.parkinsoft.backend.models.model.AllTestAnswerModel
@@ -217,47 +213,3 @@ private fun getNativeTestPreview(
     isCompleted = false,
     isViewed = false,
 )
-
-fun List<PainDetectedTestQuestions.Graphic>.mapToGraphicEntity(testPreviewId: Long): List<TestNativeGraphicAnswer> {
-    return this.map {
-        TestNativeGraphicAnswer(
-            testPreviewId = testPreviewId,
-            nativeTestId = it.id,
-            question = it.question,
-            selectedVariant = it.selectedVariant
-        )
-    }
-}
-
-fun List<PainDetectedTestQuestions.SingleAnswer>.mapToSingleAnswerEntity(testPreviewId: Long): List<TestNativeSingleAnswer> {
-    return this.map {
-        TestNativeSingleAnswer(
-            testPreviewId = testPreviewId,
-            nativeTestId = it.id,
-            question = it.question,
-            selectedAnswer = it.selectedAnswer
-        )
-    }
-}
-
-fun List<PainDetectedTestQuestions.Slider>.mapToSliderEntity(testPreviewId: Long): List<TestNativeSliderAnswer> {
-    return this.map {
-        TestNativeSliderAnswer(
-            testPreviewId = testPreviewId,
-            nativeTestId = it.id,
-            sliderAnswers = it.sliderAnswers
-        )
-    }
-}
-
-fun List<PainDetectedTestQuestions.HumanPoint>.mapToHumanPointEntity(testPreviewId: Long): List<TestNativeHumanPointAnswer> {
-    return this.map {
-        TestNativeHumanPointAnswer(
-            testPreviewId = testPreviewId,
-            nativeTestId = it.id,
-            question = it.question,
-            type = it.type,
-            selectedPoints = it.selectedPoints
-        )
-    }
-}

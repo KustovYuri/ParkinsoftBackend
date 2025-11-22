@@ -9,20 +9,20 @@ import com.parkinsoft.backend.database_utils.tests.dayli.TEST_STIMULATION_DIARY
 import com.parkinsoft.backend.models.entity.TestSingleAnswer
 import com.parkinsoft.backend.models.mappers.convertToTestResponse
 import com.parkinsoft.backend.models.mappers.mapToGraphicEntity
-import com.parkinsoft.backend.models.mappers.mapToHumanPointEntity
-import com.parkinsoft.backend.models.mappers.mapToSliderEntity
-import com.parkinsoft.backend.models.mappers.mapToSingleAnswerEntity
-import com.parkinsoft.backend.models.model.PainDetectedRequest
+import com.parkinsoft.backend.models.model.NativeTestRequest
 import com.parkinsoft.backend.models.model.ShortTestPreviewModel
 import com.parkinsoft.backend.models.model.TestAnswersDTO
 import com.parkinsoft.backend.models.model.TestModel
 import com.parkinsoft.backend.models.model.TestResultModel
 import com.parkinsoft.backend.models.model.TestType
 import com.parkinsoft.backend.repository.TestAnswerRepository
+import com.parkinsoft.backend.repository.TestNativeCommentAnswerRepository
+import com.parkinsoft.backend.repository.TestNativeDisplaySliderAnswerRepository
 import com.parkinsoft.backend.repository.TestNativeGraphicAnswerRepository
 import com.parkinsoft.backend.repository.TestNativeHumanPointAnswerRepository
 import com.parkinsoft.backend.repository.TestNativeSingleAnswerRepository
 import com.parkinsoft.backend.repository.TestNativeSliderAnswerRepository
+import com.parkinsoft.backend.repository.TestNativeYesNoAnswerRepository
 import com.parkinsoft.backend.repository.TestPreviewRepository
 import com.parkinsoft.backend.utils.convertToString
 import org.springframework.stereotype.Service
@@ -36,6 +36,9 @@ class TestService(
     private val testNativeSingleAnswerRepository: TestNativeSingleAnswerRepository,
     private val testNativeSliderAnswerRepository: TestNativeSliderAnswerRepository,
     private val testNativeHumanPointAnswerRepository: TestNativeHumanPointAnswerRepository,
+    private val testNativeYesNoAnswerRepository: TestNativeYesNoAnswerRepository,
+    private val testNativeDisplaySliderAnswerRepository: TestNativeDisplaySliderAnswerRepository,
+    private val testNativeCommentAnswerRepository: TestNativeCommentAnswerRepository,
 ) {
 
     fun getSingleAnswerTestAllTestByTestPreviewId(testPreviewId: Long, testType: TestType): List<TestModel> {
@@ -149,7 +152,7 @@ class TestService(
         }
     }
 
-    fun savePainDetectedTestAnswers(testsAnswer: PainDetectedRequest) {
+    fun saveNativeTestTestAnswers(testsAnswer: NativeTestRequest) {
         val testPreviewId = testsAnswer.testPreviewId
 
         testPreviewRepository.markCompletedTestPreviewById(testPreviewId)
@@ -160,11 +163,17 @@ class TestService(
         testNativeSingleAnswerRepository.deleteAllByTestPreviewId(testPreviewId)
         testNativeSliderAnswerRepository.deleteAllByTestPreviewId(testPreviewId)
         testNativeHumanPointAnswerRepository.deleteAllByTestPreviewId(testPreviewId)
+        testNativeYesNoAnswerRepository.deleteAllByTestPreviewId(testPreviewId)
+        testNativeDisplaySliderAnswerRepository.deleteAllByTestPreviewId(testPreviewId)
+        testNativeCommentAnswerRepository.deleteAllByTestPreviewId(testPreviewId)
 
-        testNativeGraphicAnswerRepository.saveAll(testsAnswer.graphicAnswers.mapToGraphicEntity(testPreviewId))
-        testNativeSingleAnswerRepository.saveAll(testsAnswer.singleAnswers.mapToSingleAnswerEntity(testPreviewId))
-        testNativeSliderAnswerRepository.saveAll(testsAnswer.sliderAnswers.mapToSliderEntity(testPreviewId))
-        testNativeHumanPointAnswerRepository.saveAll(testsAnswer.humanPoints.mapToHumanPointEntity(testPreviewId))
+        testsAnswer.graphicAnswers?.let { testNativeGraphicAnswerRepository.saveAll(it.map { it.convertToEntity(testPreviewId)}) }
+        testsAnswer.singleAnswers?.let { testNativeSingleAnswerRepository.saveAll(it.map { it.convertToEntity(testPreviewId)}) }
+        testsAnswer.sliderAnswers?.let { testNativeSliderAnswerRepository.saveAll(it.map { it.convertToEntity(testPreviewId)}) }
+        testsAnswer.humanPoints?.let { testNativeHumanPointAnswerRepository.saveAll(it.map { it.convertToEntity(testPreviewId)}) }
+        testsAnswer.yesNoAnswers?.let { testNativeYesNoAnswerRepository.saveAll(it.map { it.convertToEntity(testPreviewId)}) }
+        testsAnswer.displaySliderAnswers?.let { testNativeDisplaySliderAnswerRepository.saveAll(it.map { it.convertToEntity(testPreviewId)}) }
+        testsAnswer.commentAnswers?.let { testNativeCommentAnswerRepository.saveAll(it.map { it.convertToEntity(testPreviewId)}) }
     }
 
     fun getAll(): List<TestSingleAnswer> = testAnswerRepository.findAll()
