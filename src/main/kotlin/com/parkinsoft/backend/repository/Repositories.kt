@@ -55,6 +55,16 @@ interface TestPreviewRepository : JpaRepository<TestPreview, Long> {
     @Transactional
     @Query("UPDATE TestPreview t SET t.testCompletedDate = :date WHERE t.id = :id")
     fun updateCompletedDate(@Param("id") id: Long, @Param("date") date: String): Int
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE TestPreview t SET t.maxSore = :maxSore WHERE t.id = :id")
+    fun updateMaxScore(@Param("id") id: Long, @Param("maxSore") maxSore: Int): Int
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE TestPreview t SET t.score = :score WHERE t.id = :id")
+    fun updateScore(@Param("id") id: Long, @Param("score") score: Int): Int
 }
 
 interface TestAnswerRepository : JpaRepository<TestSingleAnswer, Long> {

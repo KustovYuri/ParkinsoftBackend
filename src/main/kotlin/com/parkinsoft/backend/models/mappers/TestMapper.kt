@@ -46,6 +46,9 @@ fun ShortTestPreviewModel.convertToTestPreviewEntity(
         questionsCount = questionsCount,
         isCompleted = isCompleted,
         isViewed = isViewed,
+        isNativeTest = false,
+        score = 0,
+        maxSore = 0
     )
 }
 
@@ -113,7 +116,7 @@ fun List<TestAnswersDTO>.mapToGraphicEntity(): List<TestSingleAnswer> {
     }
 }
 
-fun TestPreview.convertToTestPreviewModel(summaryPoints: Int): TestPreviewModel {
+fun TestPreview.convertToTestPreviewModel(summaryPoints: Int, maxPoints: Int): TestPreviewModel {
     return TestPreviewModel(
         id = this.id,
         patientId = this.patientId,
@@ -121,7 +124,7 @@ fun TestPreview.convertToTestPreviewModel(summaryPoints: Int): TestPreviewModel 
         testDate = this.testDate,
         questionsCount = this.questionsCount,
         isViewed = this.isViewed,
-        maxPoints = this.questionsCount * 4,
+        maxPoints = maxPoints,
         summaryPoints = summaryPoints,
         progressStatus = summaryPoints > (this.questionsCount * 4) / 2,
         testCompletedDate = testCompletedDate ?: "11.11.1111"
@@ -130,14 +133,9 @@ fun TestPreview.convertToTestPreviewModel(summaryPoints: Int): TestPreviewModel 
 
 fun PatientBody.convertToPreviewList(patientId: Long): List<TestPreview> {
     val dailyTestPreview = this.dailyTests?.map {
-        val testType = TestType.fromValue(it)
-
-        when(testType){
+        when(val testType = TestType.fromValue(it)){
             TestType.TEST_STIMULATION_DIARY -> {
-                TEST_STIMULATION_DIARY.convertToTestPreviewEntity(
-                    patientId = patientId,
-                    testDate = LocalDate.now(),
-                )
+                getNativeTestPreview(patientId, testType, 14, 15)
             }
             TestType.STATE_OF_HEALTH_DIARY -> {
                 STATE_OF_HEALTH_DIARY.convertToTestPreviewEntity(
@@ -181,13 +179,13 @@ fun PatientBody.convertToPreviewList(patientId: Long): List<TestPreview> {
                 )
             }
             TestType.DN4 -> {
-                getNativeTestPreview(patientId, testType)
+                getNativeTestPreview(patientId, testType, 4, 5)
             }
             TestType.PAIN_DETECTED -> {
-                getNativeTestPreview(patientId, testType)
+                getNativeTestPreview(patientId, testType, 13, 15)
             }
             TestType.SF36 -> {
-                getNativeTestPreview(patientId, testType)
+                getNativeTestPreview(patientId, testType, 34, 20)
             }
             else -> {
                 OSVESTRY.convertToTestPreviewEntity(
@@ -203,13 +201,18 @@ fun PatientBody.convertToPreviewList(patientId: Long): List<TestPreview> {
 
 private fun getNativeTestPreview(
     patientId: Long,
-    testType: TestType
+    testType: TestType,
+    questionsCount: Int,
+    testTime: Int
 ): TestPreview = TestPreview(
     patientId = patientId,
     testType = testType.value,
     testDate = LocalDate.now().convertToString(),
-    testTime = 15,
-    questionsCount = 15,
+    testTime = testTime,
+    questionsCount = questionsCount,
     isCompleted = false,
     isViewed = false,
+    isNativeTest = true,
+    maxSore = 0,
+    score = 0
 )

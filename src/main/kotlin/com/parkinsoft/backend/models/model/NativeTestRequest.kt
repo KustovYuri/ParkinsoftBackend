@@ -10,6 +10,8 @@ import com.parkinsoft.backend.models.entity.YesNoAnswerEntity
 
 data class NativeTestRequest(
     val testPreviewId: Long,
+    val summaryCount: Int = 0,
+    val maxPoints: Int = 0,
     val singleAnswers: List<SingleAnswerRequest>?,
     val humanPoints: List<HumanPointsRequest>?,
     val sliderAnswers: List<SliderAnswerRequest>?,

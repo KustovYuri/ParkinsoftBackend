@@ -28,8 +28,17 @@ class DoctorService(
 
     fun getLargePatientInfo(patientId: Long): LargePatientModel {
         val allTestPreviewModels = testPreviewRepository.findAllCompletedTestPreview(patientId).map {
-            val summaryPointsInTest = testAnswerRepository.countSummaryPointsInTest(it.id ?: -1)
-            it.convertToTestPreviewModel(summaryPointsInTest.toInt())
+            val summaryPointsInTest = if (it.isNativeTest) {
+                it.score
+            } else {
+                testAnswerRepository.countSummaryPointsInTest(it.id ?: -1).toInt()
+            }
+            val maxPoints = if (it.isNativeTest) {
+                it.maxSore
+            } else {
+                it.questionsCount * 4
+            }
+            it.convertToTestPreviewModel(summaryPointsInTest, maxPoints)
         }
         val patient = patientRepository.findById(patientId).get()
 

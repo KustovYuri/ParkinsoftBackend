@@ -17,5 +17,8 @@ data class TestPreview(
     val questionsCount: Int,
     val isCompleted: Boolean,
     val isViewed: Boolean? = null,
-    val testCompletedDate: String? = null
+    val testCompletedDate: String? = null,
+    val maxSore: Int,
+    val score: Int,
+    val isNativeTest: Boolean
 )

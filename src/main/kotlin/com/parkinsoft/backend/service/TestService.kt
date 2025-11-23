@@ -181,6 +181,8 @@ class TestService(
         testPreviewRepository.markCompletedTestPreviewById(testPreviewId)
         testPreviewRepository.markUnviewedTestPreviewById(testPreviewId)
         testPreviewRepository.updateCompletedDate(testPreviewId, LocalDate.now().convertToString())
+        testPreviewRepository.updateMaxScore(testPreviewId, testsAnswer.maxPoints)
+        testPreviewRepository.updateScore(testPreviewId, testsAnswer.summaryCount)
 
         testNativeGraphicAnswerRepository.deleteAllByTestPreviewId(testPreviewId)
         testNativeSingleAnswerRepository.deleteAllByTestPreviewId(testPreviewId)
