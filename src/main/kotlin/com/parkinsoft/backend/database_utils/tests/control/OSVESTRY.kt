@@ -15,7 +15,7 @@ val OSVESTRY = ShortTestPreviewModel(
     testQuestions = listOf(
         TestQuestionModel(
             questionId = 1,
-            testQuestion = "Боль",
+            testQuestion = "Боль в настоящий момент:",
             testAnswers = listOf(
                 TestAnswerModel(
                     questionId = 1,
@@ -51,7 +51,7 @@ val OSVESTRY = ShortTestPreviewModel(
         ),
         TestQuestionModel(
             questionId = 2,
-            testQuestion = "Самообслуживание (умывание, одевание и т.д.)",
+            testQuestion = "Самообслуживание (умывание, одевание и т.д.):",
             testAnswers = listOf(
                 TestAnswerModel(
                     questionId = 2,
@@ -87,7 +87,7 @@ val OSVESTRY = ShortTestPreviewModel(
         ),
         TestQuestionModel(
             questionId = 3,
-            testQuestion = "Поднимание предметов",
+            testQuestion = "Поднимание предметов:",
             testAnswers = listOf(
                 TestAnswerModel(
                     questionId = 3,
@@ -123,7 +123,7 @@ val OSVESTRY = ShortTestPreviewModel(
         ),
         TestQuestionModel(
             questionId = 4,
-            testQuestion = "Ходьба",
+            testQuestion = "Ходьба:",
             testAnswers = listOf(
                 TestAnswerModel(
                     questionId = 4,
@@ -159,7 +159,7 @@ val OSVESTRY = ShortTestPreviewModel(
         ),
         TestQuestionModel(
             questionId = 5,
-            testQuestion = "Сидение",
+            testQuestion = "Сидение:",
             testAnswers = listOf(
                 TestAnswerModel(
                     questionId = 5,
@@ -195,7 +195,7 @@ val OSVESTRY = ShortTestPreviewModel(
         ),
         TestQuestionModel(
             questionId = 6,
-            testQuestion = "Стояние",
+            testQuestion = "Стояние:",
             testAnswers = listOf(
                 TestAnswerModel(
                     questionId = 6,
@@ -231,7 +231,7 @@ val OSVESTRY = ShortTestPreviewModel(
         ),
         TestQuestionModel(
             questionId = 7,
-            testQuestion = "Сон",
+            testQuestion = "Сон:",
             testAnswers = listOf(
                 TestAnswerModel(
                     questionId = 7,
@@ -267,7 +267,7 @@ val OSVESTRY = ShortTestPreviewModel(
         ),
         TestQuestionModel(
             questionId = 8,
-            testQuestion = "Сексуальная жизнь",
+            testQuestion = "Сексуальная жизнь:",
             testAnswers = listOf(
                 TestAnswerModel(
                     questionId = 8,
@@ -303,7 +303,7 @@ val OSVESTRY = ShortTestPreviewModel(
         ),
         TestQuestionModel(
             questionId = 9,
-            testQuestion = "Образ жизни",
+            testQuestion = "Образ жизни:",
             testAnswers = listOf(
                 TestAnswerModel(
                     questionId = 9,
@@ -339,7 +339,7 @@ val OSVESTRY = ShortTestPreviewModel(
         ),
         TestQuestionModel(
             questionId = 10,
-            testQuestion = "Поездки, путешествия",
+            testQuestion = "Поездки, путешествия:",
             testAnswers = listOf(
                 TestAnswerModel(
                     questionId = 10,
