@@ -291,7 +291,7 @@ val OSVESTRY = ShortTestPreviewModel(
                 ),
                 TestAnswerModel(
                     questionId = 8,
-                    testAnswer = "Из-за боли я почти лишен/лишена сексуальной жизни.",
+                    testAnswer = "Из-за боли я почти лишен / лишена сексуальной жизни.",
                     answerPoint = 2
                 ),
                 TestAnswerModel(
@@ -303,7 +303,7 @@ val OSVESTRY = ShortTestPreviewModel(
         ),
         TestQuestionModel(
             questionId = 9,
-            testQuestion = "Образ жизни.",
+            testQuestion = "Образ жизни",
             testAnswers = listOf(
                 TestAnswerModel(
                     questionId = 9,
@@ -317,7 +317,7 @@ val OSVESTRY = ShortTestPreviewModel(
                 ),
                 TestAnswerModel(
                     questionId = 9,
-                    testAnswer = "Боль не особенно влияет на мой образ жизни, но ограничивает наиболее активную деятельность, например занятия спортом и т.п.",
+                    testAnswer = "Боль не особенно влияет на мой образ жизни, но ограничивает наиболее активную деятельность, например, занятия спортом и т.п.",
                     answerPoint = 4
                 ),
                 TestAnswerModel(
