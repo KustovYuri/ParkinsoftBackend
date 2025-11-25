@@ -52,13 +52,20 @@ fun ShortTestPreviewModel.convertToTestPreviewEntity(
     )
 }
 
-fun ShortTestPreviewModel.convertToTestResponse(previewId: Long, allUserTestSingleAnswers: List<TestSingleAnswer>): List<TestModel> {
+fun ShortTestPreviewModel.convertToTestResponse(
+    previewId: Long,
+    allUserTestSingleAnswers: List<TestSingleAnswer>
+): List<TestModel> {
     return this.testQuestions.map { testQuestions ->
         TestModel(
             previewId = previewId,
             questionId = testQuestions.questionId,
             questionName = testQuestions.testQuestion,
-            answers = testQuestions.testAnswers.convertToTestAnswersResponse(previewId, allUserTestSingleAnswers, testQuestions.questionId)
+            answers = testQuestions.testAnswers.convertToTestAnswersResponse(
+                previewId,
+                allUserTestSingleAnswers,
+                testQuestions.questionId
+            )
         )
     }
 }
@@ -132,61 +139,55 @@ fun TestPreview.convertToTestPreviewModel(summaryPoints: Int, maxPoints: Int): T
 }
 
 fun PatientBody.convertToPreviewList(patientId: Long): List<TestPreview> {
-    val dailyTestPreview = this.dailyTests?.map {
-        when(val testType = TestType.fromValue(it)){
-            TestType.TEST_STIMULATION_DIARY -> {
-                getNativeTestPreview(patientId, testType, 14, 15)
-            }
-            TestType.STATE_OF_HEALTH_DIARY -> {
-                STATE_OF_HEALTH_DIARY.convertToTestPreviewEntity(
-                    patientId = patientId,
-                    testDate = LocalDate.now(),
-                )
-            }
-            else -> {
-                STATE_OF_HEALTH_DIARY.convertToTestPreviewEntity(
-                    patientId = patientId,
-                    testDate = LocalDate.now(),
-                )
-            }
-        }
-    } ?: emptyList()
+    val dailyTestPreview = getNativeTestPreview(
+        patientId,
+        TestType.TEST_STIMULATION_DIARY,
+        14,
+        15
+    )
 
     val controlTestPreview = this.controlTests?.map {
-        when(val testType = TestType.fromValue(it)){
+        when (val testType = TestType.fromValue(it)) {
             TestType.OSVESTRY -> {
                 OSVESTRY.convertToTestPreviewEntity(
                     patientId = patientId,
                     testDate = LocalDate.now(),
                 )
             }
+
             TestType.LANSS -> {
                 LANSS.convertToTestPreviewEntity(
                     patientId = patientId,
                     testDate = LocalDate.now(),
                 )
             }
+
             TestType.HADS1 -> {
                 HADS1.convertToTestPreviewEntity(
                     patientId = patientId,
                     testDate = LocalDate.now(),
                 )
             }
+
             TestType.HADS2 -> {
                 HADS2.convertToTestPreviewEntity(
                     patientId = patientId,
                     testDate = LocalDate.now(),
                 )
             }
+
             TestType.DN4 -> {
                 getNativeTestPreview(patientId, testType, 4, 5)
             }
+
             TestType.PAIN_DETECTED -> {
                 getNativeTestPreview(patientId, testType, 13, 15)
             }
+
             TestType.SF36 -> {
                 getNativeTestPreview(patientId, testType, 34, 20)
             }
+
             else -> {
                 OSVESTRY.convertToTestPreviewEntity(
                     patientId = patientId,
@@ -196,7 +197,7 @@ fun PatientBody.convertToPreviewList(patientId: Long): List<TestPreview> {
         }
     } ?: emptyList()
 
-    return dailyTestPreview + controlTestPreview
+    return controlTestPreview + dailyTestPreview
 }
 
 fun getNativeTestPreview(
@@ -212,7 +213,7 @@ fun getNativeTestPreview(
     testTime = testTime,
     questionsCount = questionsCount,
     isCompleted = false,
-    isViewed = false,
+    isViewed = null,
     isNativeTest = true,
     maxSore = 0,
     score = 0
