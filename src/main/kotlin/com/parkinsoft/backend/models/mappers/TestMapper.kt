@@ -199,15 +199,16 @@ fun PatientBody.convertToPreviewList(patientId: Long): List<TestPreview> {
     return dailyTestPreview + controlTestPreview
 }
 
-private fun getNativeTestPreview(
+fun getNativeTestPreview(
     patientId: Long,
     testType: TestType,
     questionsCount: Int,
-    testTime: Int
+    testTime: Int,
+    testDate: String = LocalDate.now().convertToString()
 ): TestPreview = TestPreview(
     patientId = patientId,
     testType = testType.value,
-    testDate = LocalDate.now().convertToString(),
+    testDate = testDate,
     testTime = testTime,
     questionsCount = questionsCount,
     isCompleted = false,

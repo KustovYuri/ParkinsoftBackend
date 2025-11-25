@@ -21,4 +21,5 @@ data class Patient(
     val dateReceipt: String,
     val stateHealth: String,
     val onTreatments: Boolean,
+    val lastDateAllTestsRequest: String? = null
 )

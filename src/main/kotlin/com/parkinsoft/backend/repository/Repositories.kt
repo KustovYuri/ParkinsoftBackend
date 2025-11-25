@@ -14,6 +14,11 @@ interface PatientRepository : JpaRepository<Patient, Long> {
     fun findAllByDoctorId(doctorId: Long): List<Patient>
 
     fun findFirstByPhoneNumber(phoneNumber: String): Patient?
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Patient p SET p.lastDateAllTestsRequest = :date WHERE p.id = :id")
+    fun updateLastRequestDate(@Param("id") id: Long, @Param("date") date: String): Int
 }
 
 interface TestPreviewRepository : JpaRepository<TestPreview, Long> {
