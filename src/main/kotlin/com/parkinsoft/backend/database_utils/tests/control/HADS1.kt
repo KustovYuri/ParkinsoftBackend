@@ -98,22 +98,22 @@ val HADS1 = ShortTestPreviewModel(
                 TestAnswerModel(
                     questionId = 4,
                     testAnswer = "Определенно, это так",
-                    answerPoint = 3
+                    answerPoint = 0
                 ),
                 TestAnswerModel(
                     questionId = 4,
                     testAnswer = "Наверно, это так",
-                    answerPoint = 2
-                ),
-                TestAnswerModel(
-                    questionId = 4,
-                    testAnswer = "Лишь изредка, это так",
                     answerPoint = 1
                 ),
                 TestAnswerModel(
                     questionId = 4,
+                    testAnswer = "Лишь изредка, это так",
+                    answerPoint = 2
+                ),
+                TestAnswerModel(
+                    questionId = 4,
                     testAnswer = "Совсем не могу",
-                    answerPoint = 0
+                    answerPoint = 3
                 ),
             )
         ),
