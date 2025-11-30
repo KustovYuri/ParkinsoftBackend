@@ -1,6 +1,7 @@
 package com.parkinsoft.backend.controller
 
 import com.parkinsoft.backend.models.entity.Doctor
+import com.parkinsoft.backend.models.model.DischargeModel
 import com.parkinsoft.backend.models.model.DoctorWithPatientsModel
 import com.parkinsoft.backend.models.model.LargePatientModel
 import com.parkinsoft.backend.models.model.PatientBody
@@ -25,8 +26,17 @@ class DoctorController(private val service: DoctorService) {
     @GetMapping("patientInfo/{patientId}")
     fun getPatientInfo(@PathVariable patientId: Long): LargePatientModel = service.getLargePatientInfo(patientId)
 
+    @PostMapping("createFinishTests/{patientId}")
+    fun createFinishTests(@PathVariable patientId: Long) = service.createFinishTests(patientId)
+
+    @PostMapping("dischargePatient/{patientId}")
+    fun dischargePatient(@PathVariable patientId: Long) = service.dischargePatient(patientId)
+
     @PostMapping
     fun create(@RequestBody user: Doctor): Doctor = service.create(user)
+
+    @PostMapping("/updateDateDischarge")
+    fun updateDateDischarge(@RequestBody dischargeModel: DischargeModel) = service.discharge(dischargeModel)
 
     @PostMapping("/createNewPatient")
     fun createNewPatient(@RequestBody user: PatientBody): Long = service.createNewPatient(user)

@@ -1,5 +1,6 @@
 package com.parkinsoft.backend.models.entity
 
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -21,5 +22,11 @@ data class Patient(
     val dateReceipt: String,
     val stateHealth: String,
     val onTreatments: Boolean,
-    val lastDateAllTestsRequest: String? = null
+    val lastDateAllTestsRequest: String? = null,
+    @Column(columnDefinition = "text[]")
+    val selectedControlTests: List<String>? = null,
+    val dateDischarge: String? = null,
+    val isDischarge: Boolean = false,
+    val allControlTestsIsComplete: Boolean = false,
+    val finalTestsIsSending: Boolean = false
 )

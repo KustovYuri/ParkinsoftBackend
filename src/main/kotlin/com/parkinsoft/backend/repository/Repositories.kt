@@ -19,6 +19,26 @@ interface PatientRepository : JpaRepository<Patient, Long> {
     @Transactional
     @Query("UPDATE Patient p SET p.lastDateAllTestsRequest = :date WHERE p.id = :id")
     fun updateLastRequestDate(@Param("id") id: Long, @Param("date") date: String): Int
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Patient p SET p.dateDischarge = :date WHERE p.id = :id")
+    fun updateDischargeDate(@Param("id") id: Long, @Param("date") date: String?): Int
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Patient p SET p.allControlTestsIsComplete = :value WHERE p.id = :id")
+    fun allTestsIsCompleted(@Param("id") id: Long, @Param("value") value: Boolean): Int
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Patient p SET p.isDischarge = true WHERE p.id = :id")
+    fun dischargePatient(@Param("id") id: Long): Int
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Patient p SET p.finalTestsIsSending = true WHERE p.id = :id")
+    fun finalTestsIsSending(@Param("id") id: Long): Int
 }
 
 interface TestPreviewRepository : JpaRepository<TestPreview, Long> {

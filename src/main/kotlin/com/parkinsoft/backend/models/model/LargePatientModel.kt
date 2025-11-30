@@ -12,5 +12,11 @@ data class LargePatientModel(
     val dateReceipt: String,
     val stateHealth: String,
     val onTreatments: Boolean,
-    val testsPreview: List<TestPreviewModel>
+    val testsPreview: List<TestPreviewModel>,
+    val lastDateAllTestsRequest: String?,
+    val selectedControlTests: List<String>?,
+    val dateDischarge: String?,
+    val isDischarge: Boolean,
+    val allControlTestsIsComplete: Boolean,
+    val finalTestsIsSending: Boolean
 )

@@ -9,11 +9,14 @@ import com.parkinsoft.backend.models.model.ShortPatientModel
 import com.parkinsoft.backend.models.model.TestPreviewModel
 import com.parkinsoft.backend.utils.convertToString
 import java.time.LocalDate
+import kotlin.Boolean
 
 fun Patient.convertToPatientShortModel(testsPreview: List<TestPreview>): ShortPatientModel {
     return ShortPatientModel(
         id = this.id ?: -1,
-        testPreview = testsPreview
+        testPreview = testsPreview,
+        dischargeDate = dateDischarge,
+        isDischarge = isDischarge,
     )
 }
 
@@ -49,6 +52,12 @@ fun Patient.convertToLargePatientModel(allTestPreviewModels: List<TestPreviewMod
         stateHealth = this.stateHealth,
         onTreatments = this.onTreatments,
         testsPreview = allTestPreviewModels,
+        lastDateAllTestsRequest = this.lastDateAllTestsRequest,
+        selectedControlTests = this.selectedControlTests,
+        dateDischarge = this.dateDischarge,
+        isDischarge = this.isDischarge,
+        allControlTestsIsComplete = this.allControlTestsIsComplete,
+        finalTestsIsSending = this.finalTestsIsSending
     )
 }
 
@@ -65,5 +74,6 @@ fun PatientBody.convertToPatient(): Patient {
         dateReceipt = LocalDate.now().convertToString(),
         stateHealth = "Идет на поправку",
         onTreatments = true,
+        selectedControlTests = this.controlTests
     )
 }

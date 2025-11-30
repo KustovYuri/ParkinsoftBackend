@@ -2,12 +2,14 @@ package com.parkinsoft.backend.service
 
 import com.parkinsoft.backend.models.entity.Doctor
 import com.parkinsoft.backend.models.entity.TestPreview
+import com.parkinsoft.backend.models.mappers.convertControlTestsToPreviewList
 import com.parkinsoft.backend.models.mappers.convertToDoctorPatientsModel
 import com.parkinsoft.backend.models.mappers.convertToDoctorWithPatientModel
 import com.parkinsoft.backend.models.mappers.convertToLargePatientModel
 import com.parkinsoft.backend.models.mappers.convertToPatient
 import com.parkinsoft.backend.models.mappers.convertToPreviewList
 import com.parkinsoft.backend.models.mappers.convertToTestPreviewModel
+import com.parkinsoft.backend.models.model.DischargeModel
 import com.parkinsoft.backend.models.model.DoctorWithPatientsModel
 import com.parkinsoft.backend.models.model.LargePatientModel
 import com.parkinsoft.backend.models.model.PatientBody
@@ -45,6 +47,22 @@ class DoctorService(
         return patient.convertToLargePatientModel(allTestPreviewModels)
     }
 
+    fun createFinishTests(patientId: Long) {
+        val selectedControlTests = patientRepository.findById(patientId).get().selectedControlTests
+        patientRepository.finalTestsIsSending(patientId)
+
+        selectedControlTests?.let { selectedTests ->
+            testPreviewRepository.saveAll(
+                selectedTests.convertControlTestsToPreviewList(patientId)
+            )
+        }
+        patientRepository.allTestsIsCompleted(patientId, false)
+    }
+
+    fun dischargePatient(patientId: Long) {
+        patientRepository.dischargePatient(patientId)
+    }
+
     fun getDoctorWithPatients(id: Long): DoctorWithPatientsModel {
         val doctor: Doctor = doctorRepository.findById(id).get()
         val doctorPatients = patientRepository
@@ -66,6 +84,13 @@ class DoctorService(
         )
 
         return savedPatient.id ?: -1
+    }
+
+    fun discharge(dischargeModel: DischargeModel) {
+        val patientId = dischargeModel.patientID
+        val dateTime = dischargeModel.dischargeDateTime
+
+        patientRepository.updateDischargeDate(patientId, dateTime)
     }
 
     fun create(user: Doctor): Doctor = doctorRepository.save(user)

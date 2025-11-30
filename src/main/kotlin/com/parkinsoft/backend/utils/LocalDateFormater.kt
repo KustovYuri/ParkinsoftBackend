@@ -1,15 +1,22 @@
 package com.parkinsoft.backend.utils
 
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
+
+private val localDateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
+private val localDateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
 fun LocalDate.convertToString(): String {
-    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-    return this.format(formatter)
+    return this.format(localDateFormatter)
 }
 
 fun convertStringDateToLocalDate(stringDate: String): LocalDate {
-    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-    return LocalDate.parse(stringDate, formatter)
+    return LocalDate.parse(stringDate, localDateFormatter)
 }
+
+fun LocalDateTime.convertToString(): String =
+    this.format(localDateTimeFormatter)
+
+fun convertStringDateToLocalDateTime(stringDateTime: String): LocalDateTime =
+    LocalDateTime.parse(stringDateTime, localDateTimeFormatter)

@@ -47,6 +47,7 @@ class PatientService(
             }
 
             testPreviewRepository.saveAll(testPreviewList)
+            patientRepository.allTestsIsCompleted(patientId, false)
             patientRepository.updateLastRequestDate(patientId, currentDate.convertToString())
         }
 

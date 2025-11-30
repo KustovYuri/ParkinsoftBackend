@@ -15,6 +15,7 @@ import com.parkinsoft.backend.models.model.TestAnswersDTO
 import com.parkinsoft.backend.models.model.TestModel
 import com.parkinsoft.backend.models.model.TestResultModel
 import com.parkinsoft.backend.models.model.TestType
+import com.parkinsoft.backend.repository.PatientRepository
 import com.parkinsoft.backend.repository.TestAnswerRepository
 import com.parkinsoft.backend.repository.TestNativeCommentAnswerRepository
 import com.parkinsoft.backend.repository.TestNativeDisplaySliderAnswerRepository
@@ -30,6 +31,7 @@ import java.time.LocalDate
 
 @Service
 class TestService(
+    private val patientRepository: PatientRepository,
     private val testAnswerRepository: TestAnswerRepository,
     private val testPreviewRepository: TestPreviewRepository,
     private val testNativeGraphicAnswerRepository: TestNativeGraphicAnswerRepository,
@@ -172,6 +174,8 @@ class TestService(
             testAnswerRepository.saveAll(
                 testsAnswer.mapToGraphicEntity()
             )
+
+            checkAllControlTestIsCompleted(testPreviewId)
         }
     }
 
@@ -199,6 +203,16 @@ class TestService(
         testsAnswer.yesNoAnswers?.let { testNativeYesNoAnswerRepository.saveAll(it.map { it.convertToEntity(testPreviewId)}) }
         testsAnswer.displaySliderAnswers?.let { testNativeDisplaySliderAnswerRepository.saveAll(it.map { it.convertToEntity(testPreviewId)}) }
         testsAnswer.commentAnswers?.let { testNativeCommentAnswerRepository.saveAll(it.map { it.convertToEntity(testPreviewId)}) }
+
+        checkAllControlTestIsCompleted(testPreviewId)
+    }
+
+    private fun checkAllControlTestIsCompleted(testPreviewId: Long) {
+        val testPreview = testPreviewRepository.findById(testPreviewId).get()
+        val patientId = testPreview.patientId
+        val allTests = testPreviewRepository.findAllByPatientId(patientId)
+
+        patientRepository.allTestsIsCompleted(patientId, allTests.all { it.isCompleted })
     }
 
     fun getAll(): List<TestSingleAnswer> = testAnswerRepository.findAll()
