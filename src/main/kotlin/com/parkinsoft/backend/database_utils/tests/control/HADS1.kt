@@ -11,7 +11,7 @@ val HADS1 = ShortTestPreviewModel(
     testType = TestType.HADS1,
     testName = TEST_NAME,
     testTime = 10,
-    questionsCount = 14,
+    questionsCount = 7,
     testQuestions = listOf(
         TestQuestionModel(
             questionId = 1,

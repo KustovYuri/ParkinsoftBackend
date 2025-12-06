@@ -13,6 +13,7 @@ import com.parkinsoft.backend.models.model.DischargeModel
 import com.parkinsoft.backend.models.model.DoctorWithPatientsModel
 import com.parkinsoft.backend.models.model.LargePatientModel
 import com.parkinsoft.backend.models.model.PatientBody
+import com.parkinsoft.backend.models.model.TestType
 import com.parkinsoft.backend.repository.DoctorRepository
 import com.parkinsoft.backend.repository.PatientRepository
 import com.parkinsoft.backend.repository.TestAnswerRepository
@@ -33,12 +34,21 @@ class DoctorService(
             val summaryPointsInTest = if (it.isNativeTest) {
                 it.score
             } else {
-                testAnswerRepository.countSummaryPointsInTest(it.id ?: -1).toInt()
+                when(TestType.fromValue(it.testType)) {
+                    TestType.OSVESTRY -> (testAnswerRepository.countSummaryPointsInTest(it.id ?: -1).toInt() * 100) / 50
+                    else -> testAnswerRepository.countSummaryPointsInTest(it.id ?: -1).toInt()
+                }
             }
             val maxPoints = if (it.isNativeTest) {
                 it.maxSore
             } else {
-                it.questionsCount * 4
+                when (TestType.fromValue(it.testType)) {
+                    TestType.HADS1 -> it.questionsCount * 3
+                    TestType.HADS2 -> it.questionsCount * 3
+                    TestType.OSVESTRY -> 100
+                    TestType.LANSS -> 24
+                    else -> it.questionsCount * 4
+                }
             }
             it.convertToTestPreviewModel(summaryPointsInTest, maxPoints)
         }
