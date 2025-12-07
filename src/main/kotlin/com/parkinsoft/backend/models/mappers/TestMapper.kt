@@ -134,7 +134,15 @@ fun TestPreview.convertToTestPreviewModel(summaryPoints: Int, maxPoints: Int): T
         maxPoints = maxPoints,
         summaryPoints = summaryPoints,
         progressStatus = summaryPoints > (this.questionsCount * 4) / 2,
-        testCompletedDate = testCompletedDate ?: "11.11.1111"
+        testCompletedDate = testCompletedDate ?: "11.11.1111",
+        pf = pf,
+        rp = rp,
+        bp = bp,
+        gh = gh,
+        vt = vt,
+        sf = sf,
+        re = re,
+        mh = mh,
     )
 }
 

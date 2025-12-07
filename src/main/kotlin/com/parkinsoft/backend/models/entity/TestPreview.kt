@@ -20,5 +20,13 @@ data class TestPreview(
     val testCompletedDate: String? = null,
     val maxSore: Int,
     val score: Int,
-    val isNativeTest: Boolean
+    val isNativeTest: Boolean,
+    val pf: Float? = null,
+    val rp: Float? = null,
+    val bp: Float? = null,
+    val gh: Float? = null,
+    val vt: Float? = null,
+    val sf: Float? = null,
+    val re: Float? = null,
+    val mh: Float? = null,
 )

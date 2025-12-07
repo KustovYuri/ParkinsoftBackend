@@ -69,11 +69,13 @@ interface TestPreviewRepository : JpaRepository<TestPreview, Long> {
     @Query("UPDATE TestPreview t SET t.isViewed = true WHERE t.id = :id")
     fun markViewedTestPreviewById(@Param("id") id: Long): Int
 
-    @Query("""
+    @Query(
+        """
         SELECT COUNT(tp)
         FROM TestPreview tp
         WHERE tp.patientId = :patientId AND tp.isViewed = false
-    """)
+    """
+    )
     fun countUnviewedByPatientId(@Param("patientId") patientId: Long): Long
 
     @Modifying
@@ -90,6 +92,33 @@ interface TestPreviewRepository : JpaRepository<TestPreview, Long> {
     @Transactional
     @Query("UPDATE TestPreview t SET t.score = :score WHERE t.id = :id")
     fun updateScore(@Param("id") id: Long, @Param("score") score: Int): Int
+
+    @Modifying
+    @Transactional
+    @Query(
+        "UPDATE TestPreview t" +
+                " SET " +
+                "t.pf = :pf, " +
+                "t.rp = :rp, " +
+                "t.bp = :bp, " +
+                "t.gh = :gh, " +
+                "t.vt = :vt, " +
+                "t.sf = :sf, " +
+                "t.re = :re, " +
+                "t.mh = :mh " +
+                " WHERE t.id = :id"
+    )
+    fun updateSF36Score(
+        @Param("id") id: Long,
+        @Param("pf") pf: Float,
+        @Param("rp") rp: Float,
+        @Param("bp") bp: Float,
+        @Param("gh") gh: Float,
+        @Param("vt") vt: Float,
+        @Param("sf") sf: Float,
+        @Param("re") re: Float,
+        @Param("mh") mh: Float,
+    ): Int
 }
 
 interface TestAnswerRepository : JpaRepository<TestSingleAnswer, Long> {
@@ -100,11 +129,13 @@ interface TestAnswerRepository : JpaRepository<TestSingleAnswer, Long> {
     @Query("DELETE FROM TestSingleAnswer ta WHERE ta.testPreviewId = :previewId")
     fun deleteAllByTestPreviewId(@Param("previewId") previewId: Long)
 
-    @Query("""
+    @Query(
+        """
         SELECT COALESCE(SUM(ta.answerPoint), 0)
         FROM TestSingleAnswer ta
         WHERE ta.testPreviewId = :previewId
-    """)
+    """
+    )
     fun countSummaryPointsInTest(previewId: Long): Long
 }
 

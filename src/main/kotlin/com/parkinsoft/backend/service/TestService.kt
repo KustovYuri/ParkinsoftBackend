@@ -187,6 +187,28 @@ class TestService(
         testPreviewRepository.updateCompletedDate(testPreviewId, LocalDate.now().convertToString())
         testPreviewRepository.updateMaxScore(testPreviewId, testsAnswer.maxPoints)
         testPreviewRepository.updateScore(testPreviewId, testsAnswer.summaryCount)
+        if (
+            testsAnswer.pf != null &&
+            testsAnswer.rp != null &&
+            testsAnswer.bp != null &&
+            testsAnswer.gh != null &&
+            testsAnswer.vt != null &&
+            testsAnswer.sf != null &&
+            testsAnswer.re != null &&
+            testsAnswer.mh != null
+        ) {
+            testPreviewRepository.updateSF36Score(
+                testPreviewId,
+                testsAnswer.pf,
+                testsAnswer.rp,
+                testsAnswer.bp,
+                testsAnswer.gh,
+                testsAnswer.vt,
+                testsAnswer.sf,
+                testsAnswer.re,
+                testsAnswer.mh,
+            )
+        }
 
         testNativeGraphicAnswerRepository.deleteAllByTestPreviewId(testPreviewId)
         testNativeSingleAnswerRepository.deleteAllByTestPreviewId(testPreviewId)

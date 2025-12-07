@@ -19,6 +19,14 @@ data class NativeTestRequest(
     val yesNoAnswers: List<YesNoAnswerRequest>?,
     val displaySliderAnswers: List<DisplaySliderAnswerRequest>?,
     val commentAnswers: List<CommentAnswerRequest>?,
+    val pf: Float? = null,
+    val rp: Float? = null,
+    val bp: Float? = null,
+    val gh: Float? = null,
+    val vt: Float? = null,
+    val sf: Float? = null,
+    val re: Float? = null,
+    val mh: Float? = null,
 )
 
 data class SingleAnswerRequest(
